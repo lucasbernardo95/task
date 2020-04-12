@@ -1,0 +1,26 @@
+##	Task Backend
+
+## Implemented items:
+
+### A. Application using JSF
+### B. Persistence with MySQL
+### C. Used Hibernate AND JPA
+### D. Used Spring Framework Boot 2.2
+### F. JSF pages with PrimeFaces
+### G. Tests implemented with JUnit and Mockito
+
+### Deployment of a simple crud for events and a REST service. Backend developed with:
+#### Spring Boot
+#### Hibernate
+#### PostgreSQL
+#### JSF and PrimeFaces.
+
+How to run?
+# 1 - It is necessary to have mysql and tomcan.
+# 2 - In the applicatrion.properties file, define the database user and password:
+	spring.datasource.username=root
+	spring.datasource.password=
+
+# 3 - For the project to run normally, it is only necessary to create a database 
+	with the name 'task' and, at login, inform username and password as 'admin'.
+	URL: http://localhost:8080/login
