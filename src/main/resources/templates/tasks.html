@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Todo MVC  - Lucas Formiga</title>
+ <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="style/styleCss.css"/>-->
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+   		<!--<span class="navbar-brand mb-0 h1" style="font-weight: bold;">TodoMVC - Lucas Formiga</span>   --> 
+		<a href="/newtask" class="btn btn-primary" role="button">New task</a>            
+     </nav>        
+  
+  	 <div class="container"  style="width: 60; padding-bottom: 5px; height: 20px">    
+	    <section class="todoapp">
+	   		<header class="header">
+				<h1>todos</h1>
+				<input class="new-todo" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section class="main">
+				<input id="toggle-all" class="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class="todo-list"></ul>
+			</section>
+			<section>
+				<input id="toggle-all" class="toggle-all" type="checkbox" >  <!--ng-model="allChecked" ng-click="markAll(allChecked)" -->
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class="todo-list" >
+					<li th:each="task : ${tasks}">
+						<div class="view">
+							<input class="toggle" type="checkbox">
+							<label th:text="${task.description}"></label>
+							<button class="destroy"></button>
+						</div>
+						<!-- <form><input class="edit"></form> -->						
+					</li>		
+				</ul>
+					<footer class="footer">
+					<!--
+						<span class="todo-count"><strong>4</strong>						
+						</span>
+						<ul class="filters">
+							<li>
+								<a ng-class="{selected: status == ''} " href="#/">All</a>
+							</li>
+							<li>
+								<a ng-class="{selected: status == 'active'}" href="#/active">Active</a>
+							</li>
+							<li>
+								<a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
+							</li>
+						</ul>
+						<button class="clear-completed" >Clear completed</button>-->
+						<span class="todo-count">
+							<strong>5</strong>
+							<span>items</span>
+							<span> left</span>
+						</span>
+						<ul class="filters">
+						<li>
+							<a href="#/" class="selected">All</a>
+						</li>
+						<li>
+							<a href="#/active">Active</a>
+						</li>
+						<li>
+							<a href="#/completed">Completed</a>
+						</li>
+					</ul>
+					</footer>				
+			</section>			
+		</section>			
+	</div>
+</body>
+</html>

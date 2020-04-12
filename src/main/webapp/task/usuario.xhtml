@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+</h:head>
+<body onclick="#{taskBean.buscarUsuario()}">
+	<h:form id="principalForm">
+		<p:growl id="message" showDetail="true" /> 
+        
+		<p:menubar id="menu">
+			<p:menuitem value="Home" url="#"></p:menuitem>
+			<p:menuitem value="GitHub" url="https://github.com/lucasbernardo95"></p:menuitem>
+			<p:menuitem value="Sair" url="http://localhost:8080/logout"></p:menuitem>
+		</p:menubar>
+	
+		
+	
+		<!-- Table for show events --> 
+		<p:dataTable id="table" var="object" value="#{taskBean.usuarioSession.tarefas}"
+			rowKey="#{object.id}" paginator="true" rows="6"
+			selectionMode="single" selection="#{taskBean.selected}"
+			paginatorPosition="top">
+
+			<f:facet name="header">
+				Tarefas
+        	</f:facet>
+			<p:ajax event="rowSelect" listener="#{taskBean.onRowSelect}"
+				update="principalForm" />
+			<p:ajax event="rowUnselect" listener="#{taskBean.onRowUnselect}"
+				update="principalForm" />
+
+			<p:column style="width:16px">
+				<p:rowToggler />
+			</p:column>
+
+			<p:column headerText="Descrição" filterBy="#{object.description}"
+				filterMatchMode="contains">
+				<h:outputText value="#{object.description}" />
+			</p:column>
+			
+			<p:column headerText="Status" filterBy="#{object.stateTask}"
+				filterMatchMode="contains">
+				<h:outputText value="#{object.stateTask}" />
+			</p:column>
+			
+			<p:rowExpansion>
+				<p:panelGrid columns="2" columnClasses="label,value">
+					<f:facet name="header">
+						<h:outputText value="#{object.id}" />
+					</f:facet>
+					<h:outputText value="Descrição" />
+					<h:outputText value="#{object.description}" />
+
+					<h:outputText value="Data" />
+					<h:outputText value="#{object.creationDate}" />
+
+					<h:outputText value="Status" />
+					<h:outputText value="#{object.stateTask}" />
+
+				</p:panelGrid>
+			</p:rowExpansion>
+
+			<f:facet name="footer">
+				<p:commandButton process="@this" update="principalForm" icon="fa fa-plus"
+					title="Cadastrar" oncomplete="PF('diagCadastrar').show();" actionListener="#{taskBean.reset()}" />
+			</f:facet>
+			<f:facet name="footer">
+				<p:commandButton process="@this" update="formAlterar" icon="fa fa-edit"
+					title="Alterar" oncomplete="PF('diagAlterar').show();"
+					disabled="#{empty taskBean.selected.description}" />
+			</f:facet>
+			<f:facet name="footer">
+				<p:commandButton process="@this" update="principalForm"
+					disabled="#{empty taskBean.selected.description}" title="Deletar" icon="fa fa-trash"
+					action="#{taskBean.delete}">
+					<p:confirm header="Deletar" message="Deseja confirmar?" />
+				</p:commandButton>
+			</f:facet>
+			<f:facet name="footer">
+				<p:commandButton process="@this" update="formAlterarUser" icon="fa fa-user"
+					title="Alterar usuário" oncomplete="PF('diagAlterarUser').show();"  />
+			</f:facet>
+		</p:dataTable>
+		
+		<p:dialog header="Cadastrar" widgetVar="diagCadastrar" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false">
+			<p:panelGrid columns="3">
+				<f:facet name="header">
+					<p:row>
+						<p:commandButton value="Salvar"
+							actionListener="#{taskBean.novo}" update="principalForm">
+						</p:commandButton>
+					</p:row>
+				</f:facet>
+
+				<p:outputLabel value="Descrição"  for="description"/>
+				<p:inputTextarea value="#{taskBean.entity.description}" rows="2" required="true"
+					counter="dispNomeNew" maxlength="50" cols="50" id="description"
+					counterTemplate="{0} caracteres restantes." autoResize="true" >
+					<f:validateLength minimum="3" />
+					<p:ajax update="msgLastname" event="keyup" />
+				</p:inputTextarea>
+					
+				<p:message for="description" id="msgLastname" />
+				<p:outputLabel id="dispNomeNew" />
+
+			</p:panelGrid>
+		</p:dialog>
+		
+				<!-- Botão de confirmação para deletar -->
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" />
+			<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" />
+		</p:confirmDialog>
+		
+		<p:dock position="bottom">
+			<p:menuitem value="Github" icon="/img/github.png" url="https://github.com/lucasbernardo95/task" />
+			<p:menuitem value="ESIG" icon="/img/esig.png" url="https://esig.com.br/portalsig/" />
+			<p:menuitem value="Sair" icon="/img/logout.png" url="http://localhost:8080/logout"/>
+		</p:dock>
+	
+	</h:form>
+	
+	<h:form id="formAlterar">
+				<!-- Dialog for update event -->
+		<p:dialog header="Atualizar" widgetVar="diagAlterar" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false">
+			<p:panelGrid columns="3">
+				<f:facet name="header">
+					<p:row>
+						<p:commandButton value="Salvar" action="#{taskBean.alterar}" actionListener="#{taskBean.buscarUsuario}"
+							update="principalForm :formAlterar">
+						</p:commandButton>
+					</p:row>
+				</f:facet>
+
+				<p:outputLabel value="Nome" />
+				<p:inputTextarea value="#{taskBean.selected.description}" rows="1"
+					counter="dispNomeEdit" maxlength="50" cols="50"
+					counterTemplate="{0} caracteres restantes." autoResize="true" />
+				<p:outputLabel id="dispNomeEdit" />
+				
+				<p:selectBooleanCheckbox value="#{taskBean.selected.statusSwitch}">
+        		</p:selectBooleanCheckbox>
+
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+	
+	<h:form id="formAlterarUser">
+		<p:dialog header="Atualizar" widgetVar="diagAlterarUser" modal="true"
+			showEffect="fade" hideEffect="fade" resizable="false">
+			<p:panelGrid columns="6">
+				<f:facet name="header">
+					<p:row>
+						<p:commandButton value="Salvar" action="#{userBean.alterar}"
+							update="formAlterarUser" >
+						</p:commandButton>
+					</p:row>
+				</f:facet>
+
+				<p:outputLabel value="Nome" />
+    			<p:inputText value="#{userBean.usuarioSessao.nome}" required="true"/>
+    			
+				<p:outputLabel value="Login" />
+    			<p:inputText value="#{userBean.usuarioSessao.login}" required="true"/>
+				
+				<p:outputLabel value="Senha" />
+    			<p:password value="#{userBean.usuarioSessao.senha}" required="true"/>
+
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+	
+	</body>
+</html>
